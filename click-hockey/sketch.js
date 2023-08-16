@@ -1,7 +1,7 @@
 let xPos = 250;
 let yPos = 0;
-let xSpeed = 2;
-let ySpeed = 2;
+let xSpeed = 0;
+let ySpeed = 0;
 let score = 0;
 
 function setup() {
@@ -16,21 +16,21 @@ function draw() {
     background(222);
 
     // draw goal
-    fill(0, 255 0);
+    fill(0, 255, 0);
     rect(250, 490, 60, 20);
 
     // draw ball
     fill(255, 0, 255);
-    rect(30, xPos, yPos);
+    rect(xPos, yPos, 30, 30);  // Adjusted the size of the square
 
     // draw score
     fill(18);
     textSize(20);
-    text("Score: " + score, 0, 0)
+    text("Score: " + score, 10, 25);  // Adjusted the position of the score text
 
     // check if in goal
-    if (xPos + 15 <= 220 && xPos - 15 <= 280 && yPos + 15 >= 480) {
-        score;
+    if (xPos + 15 >= 220 && xPos - 15 <= 280 && yPos + 15 >= 480) {  // Adjusted the condition for scoring
+        score++;
         // reset position and speed
         xPos = random(15, 485);
         yPos = 0;
@@ -56,6 +56,13 @@ function draw() {
 }
 
 function mouseClicked() {
-    xSpeed = random(-5, 5);
-    ySpeed = random(0, 5);
+    // Calculate the direction vector towards the mouse click
+    let directionX = mouseX - xPos;
+    let directionY = mouseY - yPos;
+
+    // Normalize the direction vector to control the speed of movement
+    let directionMagnitude = sqrt(directionX ** 2 + directionY ** 2);
+    let slowerSpeed = 2;  // Adjust the slower speed value as needed
+    xSpeed = directionX / directionMagnitude * slowerSpeed;
+    ySpeed = directionY / directionMagnitude * slowerSpeed;
 }
